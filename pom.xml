@@ -13,6 +13,13 @@
 			<url>https://clojars.org/repo</url>
 		</repository>
 	</distributionManagement>
+	
+	<scm>
+        <connection>scm:git:https://github.com/saarthakgupta/couchbase-healthcheck.git</connection>
+        <developerConnection>scm:git:https://github.com/saarthakgupta/couchbase-healthcheck.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/saarthakgupta/couchbase-healthcheck</url>
+    </scm>
 
 
 	<licenses>
