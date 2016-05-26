@@ -3,22 +3,25 @@ package com.saarthak.healthcheck;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.codahale.metrics.health.HealthCheck;
 import com.couchbase.client.java.document.json.JsonArray;
 import com.couchbase.client.java.document.json.JsonObject;
 import com.saarthak.client.CouchbaseClient;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * @author saarthak.gupta
  *
  */
-@AllArgsConstructor
-@Slf4j
 public class CouchBaseHealthCheck extends HealthCheck {
+    private static final Logger log = LoggerFactory.getLogger(CouchBaseHealthCheck.class);
     private final CouchbaseClient couchbaseClient;
+
+    public CouchBaseHealthCheck(final CouchbaseClient couchbaseClient) {
+        this.couchbaseClient = couchbaseClient;
+    }
 
     @Override
     protected Result check() throws Exception {

@@ -1,25 +1,31 @@
 package com.saarthak.client;
 
 import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.CouchbaseCluster;
 import com.couchbase.client.java.document.json.JsonArray;
-import com.couchbase.client.java.env.CouchbaseEnvironment;
-import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
-import com.saarthak.config.CouchbaseConfig;
 
-import lombok.Getter;
-
-@Getter
 public class CouchbaseClient {
 
-    private CouchbaseConfig config;
+    private String user;
+    private String password;
     private Cluster cluster;
 
-    public CouchbaseClient(final CouchbaseConfig couchbaseConfig) {
+    public CouchbaseClient(final String user, final String password, final Cluster cluster) {
         super();
-        this.config = couchbaseConfig;
-        final CouchbaseEnvironment couchbaseEnvironment = DefaultCouchbaseEnvironment.builder().build();
-        this.cluster = CouchbaseCluster.create(couchbaseEnvironment, couchbaseConfig.getNodes());
+        this.user = user;
+        this.password = password;
+        this.cluster = cluster;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Cluster getCluster() {
+        return cluster;
     }
 
     public void shutdown() {
@@ -28,6 +34,6 @@ public class CouchbaseClient {
     }
 
     public JsonArray getNodes() {
-        return (JsonArray) this.cluster.clusterManager(config.getUser(), config.getPassword()).info().raw().get("nodes");
+        return (JsonArray) this.cluster.clusterManager(this.getUser(), this.getPassword()).info().raw().get("nodes");
     }
 }
