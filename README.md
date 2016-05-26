@@ -1,6 +1,6 @@
-# Dropwizard Couchbase Healthcheck
+# Couchbase Healthcheck
 
-This is a couchbase healthcheck which can be used to check the heath of individual couchbase nodes.
+This is a couchbase healthcheck module which can be used to check the heath of individual couchbase nodes.
 This library compiles only on Java 8.
  
 ## Dependencies
