@@ -4,7 +4,7 @@ This is a couchbase healthcheck which can be used to check the heath of individu
 This library compiles only on Java 8.
  
 ## Dependencies
-dropwizard-core: 0.9.2
+dropwizard-core: 0.9.2  
 couchbase-client: 2.2.3
 
 ## Usage
