@@ -25,9 +25,9 @@ Use the following maven dependency:
 ### Using Couchbase healthcheck with dropwizard
 ```java
  final CouchbaseEnvironment couchbaseEnvironment = DefaultCouchbaseEnvironment.builder().build();
-        private Cluster cluster = CouchbaseCluster.create(couchbaseEnvironment, getNodes()); // getNodes() method returns a List<String> of nodes.
-final CouchbaseClient couchbaseClient = new CouchbaseClient(getUserName(), getPassword(), cluster);// CouchbaseClient is bundled and needs username, password and cluster object to connect to hosts.
-environment.healthChecks().register("Couchbase", new CouchBaseHealthCheck(couchbaseClient));
+ private Cluster cluster = CouchbaseCluster.create(couchbaseEnvironment, getNodes()); // getNodes() method returns a List<String> of nodes.
+ final CouchbaseClient couchbaseClient = new CouchbaseClient(getUserName(), getPassword(), cluster);// CouchbaseClient is bundled and needs username, password and cluster object to connect to hosts.
+ environment.healthChecks().register("Couchbase", new CouchBaseHealthCheck(couchbaseClient));
 ```
 
 LICENSE
