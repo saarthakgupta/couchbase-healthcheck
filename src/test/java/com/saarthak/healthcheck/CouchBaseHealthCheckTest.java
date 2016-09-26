@@ -29,14 +29,14 @@ public class CouchBaseHealthCheckTest {
     @Test
     public void checkThreeHealthy() throws Exception {
         reset(couchbaseClient);
-        when(couchbaseClient.getNodes()).thenReturn(getFiveHealthyNodes());
+        when(couchbaseClient.getNodes()).thenReturn(getThreeHealthyNodes());
         assertTrue(couchBaseHealthCheck.check().isHealthy());
     }
 
     @Test
     public void checkFiveHealthy() throws Exception {
         reset(couchbaseClient);
-        when(couchbaseClient.getNodes()).thenReturn(gethealthyNodesQuroum());
+        when(couchbaseClient.getNodes()).thenReturn(getFiveHealthyNodes());
         assertTrue(couchBaseHealthCheck.check().isHealthy());
 
     }
@@ -57,6 +57,14 @@ public class CouchBaseHealthCheckTest {
     }
 
 
+    private JsonArray getThreeHealthyNodes() {
+        final JsonArray array = JsonArray.create();
+        array.add(createNode("healthy", "node1"));
+        array.add(createNode("healthy", "node2"));
+        array.add(createNode("unhealthy", "node3"));
+        return array;
+    }
+
     private JsonArray getThreeUnhealthyNodes() {
         final JsonArray array = JsonArray.create();
         array.add(createNode("unhealthy", "node1"));
@@ -75,21 +83,6 @@ public class CouchBaseHealthCheckTest {
         return array;
     }
 
-    private JsonArray gethealthyNodesQuroum() {
-        final JsonArray array = JsonArray.create();
-        array.add(createNode("unhealthy", "node1"));
-        array.add(createNode("healthy", "node2"));
-        array.add(createNode("healthy", "node3"));
-        return array;
-    }
-
-    private JsonObject createNode(final String status, final String nodeName) {
-        final JsonObject node1 = JsonObject.create();
-        node1.put("status", status);
-        node1.put("hostname", nodeName);
-        return node1;
-    }
-
     private JsonArray getFiveHealthyNodes() {
         final JsonArray array = JsonArray.create();
         array.add(createNode("healthy", "node1"));
@@ -100,7 +93,10 @@ public class CouchBaseHealthCheckTest {
         return array;
     }
 
-
-
-
+    private JsonObject createNode(final String status, final String nodeName) {
+        final JsonObject node1 = JsonObject.create();
+        node1.put("status", status);
+        node1.put("hostname", nodeName);
+        return node1;
+    }
 }
