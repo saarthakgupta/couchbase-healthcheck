@@ -26,28 +26,24 @@ public class CouchBaseHealthCheck extends HealthCheck {
     @Override
     protected Result check() throws Exception {
         log.info("Running health check for couch base");
-
-        JsonArray nodes = couchbaseClient.getNodes();
-        Boolean isHealthy = true;
-        final List<Boolean> nodesList = new ArrayList<>();
-        List<String> healthyNodes = new ArrayList<>();
-        List<String> unHealthyNodes = new ArrayList<>();
-        nodes.iterator().forEachRemaining(node -> {
-            JsonObject obj = (JsonObject) node;
-            boolean isNodeHealthy = "healthy".equals(obj.get("status"));
-            nodesList.add(isNodeHealthy);
+        final JsonArray nodes = couchbaseClient.getNodes();
+        final List<String> healthyNodes = new ArrayList<>();
+        final List<String> unhealthyNodes = new ArrayList<>();
+        nodes.forEach(node -> {
+            final JsonObject obj = (JsonObject) node;
+            final boolean isNodeHealthy = "healthy".equals(obj.get("status"));
             if (isNodeHealthy) {
                 healthyNodes.add(obj.getString("hostname"));
             } else {
-                unHealthyNodes.add(obj.getString("hostname"));
+                unhealthyNodes.add(obj.getString("hostname"));
             }
         });
 
-        for (Boolean node : nodesList) {
-            isHealthy = isHealthy && node;
-        }
+        //isHealthy is derived to be true when 50% or more nodes are healthy.
+        final boolean isHealthy = healthyNodes.size() >= unhealthyNodes.size();
+
         return isHealthy ? Result.healthy("Connected to Couchbase cluster. Healthy Nodes : " + healthyNodes)
-                : Result.unhealthy("Not Connected to Couchbase cluster. Healthy Nodes: " + healthyNodes + ". Unhealthy Nodes: " + unHealthyNodes);
+                : Result.unhealthy("Not Connected to Couchbase cluster. Healthy Nodes: " + healthyNodes + ". Unhealthy Nodes: " + unhealthyNodes);
     }
 
 }

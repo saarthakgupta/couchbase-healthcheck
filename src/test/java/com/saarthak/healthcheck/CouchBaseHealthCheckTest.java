@@ -1,20 +1,19 @@
 package com.saarthak.healthcheck;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
+import com.couchbase.client.java.document.json.JsonArray;
+import com.couchbase.client.java.document.json.JsonObject;
+import com.saarthak.client.CouchbaseClient;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.couchbase.client.java.document.json.JsonArray;
-import com.couchbase.client.java.document.json.JsonObject;
-import com.saarthak.client.CouchbaseClient;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 /**
  * @author saarthak.gupta
- *
  */
 public class CouchBaseHealthCheckTest {
 
@@ -28,39 +27,80 @@ public class CouchBaseHealthCheckTest {
     }
 
     @Test
-    public void checkHealthy() throws Exception {
-        when(couchbaseClient.getNodes()).thenReturn(getHealthyNodes());
+    public void checkThreeHealthy() throws Exception {
+        reset(couchbaseClient);
+        when(couchbaseClient.getNodes()).thenReturn(getFiveHealthyNodes());
+        assertTrue(couchBaseHealthCheck.check().isHealthy());
+    }
 
+    @Test
+    public void checkFiveHealthy() throws Exception {
+        reset(couchbaseClient);
+        when(couchbaseClient.getNodes()).thenReturn(gethealthyNodesQuroum());
         assertTrue(couchBaseHealthCheck.check().isHealthy());
 
     }
 
     @Test
-    public void checkUnHealthy() throws Exception {
-        when(couchbaseClient.getNodes()).thenReturn(getUnHealthyNodes());
+    public void checkThreeUnhealthy() throws Exception {
+        reset(couchbaseClient);
+        when(couchbaseClient.getNodes()).thenReturn(getThreeUnhealthyNodes());
         assertFalse(couchBaseHealthCheck.check().isHealthy());
-
     }
 
-    private JsonArray getUnHealthyNodes() {
-        JsonObject node = JsonObject.create();
-        node.put("status", "unhealthy");
-        node.put("hostname", "localhost");
-        JsonObject node1 = JsonObject.create();
-        node1.put("status", "healthy");
-        node1.put("hostname", "localhost");
-        JsonArray array = JsonArray.create();
-        array.add(node);
+
+    @Test
+    public void checkFiveUnhealthy() throws Exception {
+        reset(couchbaseClient);
+        when(couchbaseClient.getNodes()).thenReturn(getFiveUnhealthyNodes());
+        assertFalse(couchBaseHealthCheck.check().isHealthy());
+    }
+
+
+    private JsonArray getThreeUnhealthyNodes() {
+        final JsonArray array = JsonArray.create();
+        array.add(createNode("unhealthy", "node1"));
+        array.add(createNode("healthy", "node2"));
+        array.add(createNode("unhealthy", "node3"));
         return array;
     }
 
-    private JsonArray getHealthyNodes() {
-        JsonObject node = JsonObject.create();
-        node.put("status", "healthy");
-        node.put("hostname", "localhost");
-        JsonArray array = JsonArray.create();
-        array.add(node);
+    private JsonArray getFiveUnhealthyNodes() {
+        final JsonArray array = JsonArray.create();
+        array.add(createNode("healthy", "node1"));
+        array.add(createNode("healthy", "node2"));
+        array.add(createNode("unhealthy", "node3"));
+        array.add(createNode("unhealthy", "node4"));
+        array.add(createNode("unhealthy", "node5"));
         return array;
     }
+
+    private JsonArray gethealthyNodesQuroum() {
+        final JsonArray array = JsonArray.create();
+        array.add(createNode("unhealthy", "node1"));
+        array.add(createNode("healthy", "node2"));
+        array.add(createNode("healthy", "node3"));
+        return array;
+    }
+
+    private JsonObject createNode(final String status, final String nodeName) {
+        final JsonObject node1 = JsonObject.create();
+        node1.put("status", status);
+        node1.put("hostname", nodeName);
+        return node1;
+    }
+
+    private JsonArray getFiveHealthyNodes() {
+        final JsonArray array = JsonArray.create();
+        array.add(createNode("healthy", "node1"));
+        array.add(createNode("healthy", "node2"));
+        array.add(createNode("unhealthy", "node3"));
+        array.add(createNode("unhealthy", "node4"));
+        array.add(createNode("healthy", "node5"));
+        return array;
+    }
+
+
+
 
 }
