@@ -30,7 +30,6 @@ public class CouchbaseClient {
 
     public void shutdown() {
         this.cluster.disconnect();
-        // this.cluster.disconnect(10, TimeUnit.SECONDS);
     }
 
     public JsonArray getNodes() {

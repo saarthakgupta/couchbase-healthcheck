@@ -1,14 +1,14 @@
 # Couchbase Healthcheck
 
-This is a couchbase healthcheck module which can be used to check the heath of individual couchbase nodes.
+This is a Couchbase healthcheck module which can be used to check the health of Couchbase cluster.
 This library compiles only on Java 8.
  
 ## Dependencies
-dropwizard-core: 0.9.2  
-couchbase-client: 2.2.3
+dropwizard-core: 1.0.2
+couchbase-client: 2.3.3
 
 ## Usage
-Couchbase healthcheck makes it easy to monitor the health of individual nodes in the cluster by polling them and getting the status. It reports Healthy only if the status of all the nodes in the cluster is healthy.
+Couchbase healthcheck makes it easy to monitor the health of individual nodes in the cluster by polling them and getting the status. It reports Healthy only if the status of more than half the nodes in the cluster is healthy.
  
 
 ### Maven Dependency

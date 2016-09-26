@@ -5,10 +5,10 @@ import com.couchbase.client.java.document.json.JsonObject;
 import com.saarthak.client.CouchbaseClient;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
@@ -22,7 +22,7 @@ public class CouchBaseHealthCheckTest {
 
     @BeforeClass
     public static void setup() {
-        couchbaseClient = Mockito.mock(CouchbaseClient.class);
+        couchbaseClient = mock(CouchbaseClient.class);
         couchBaseHealthCheck = new CouchBaseHealthCheck(couchbaseClient);
     }
 
