@@ -17,27 +17,30 @@ import static org.mockito.Mockito.when;
  */
 public class CouchBaseHealthCheckTest {
 
+    private static CouchBaseHealthCheck defaultCouchBaseHealthCheck;
     private static CouchBaseHealthCheck couchBaseHealthCheck;
     private static CouchbaseClient couchbaseClient;
+    private static int minimumHealthyNodes = 2;
 
     @BeforeClass
     public static void setup() {
         couchbaseClient = mock(CouchbaseClient.class);
-        couchBaseHealthCheck = new CouchBaseHealthCheck(couchbaseClient);
+        defaultCouchBaseHealthCheck = new CouchBaseHealthCheck(couchbaseClient);
+        couchBaseHealthCheck = new CouchBaseHealthCheck(couchbaseClient, minimumHealthyNodes);
     }
 
     @Test
     public void checkThreeHealthy() throws Exception {
         reset(couchbaseClient);
         when(couchbaseClient.getNodes()).thenReturn(getThreeHealthyNodes());
-        assertTrue(couchBaseHealthCheck.check().isHealthy());
+        assertTrue(defaultCouchBaseHealthCheck.check().isHealthy());
     }
 
     @Test
     public void checkFiveHealthy() throws Exception {
         reset(couchbaseClient);
         when(couchbaseClient.getNodes()).thenReturn(getFiveHealthyNodes());
-        assertTrue(couchBaseHealthCheck.check().isHealthy());
+        assertTrue(defaultCouchBaseHealthCheck.check().isHealthy());
 
     }
 
@@ -45,7 +48,7 @@ public class CouchBaseHealthCheckTest {
     public void checkThreeUnhealthy() throws Exception {
         reset(couchbaseClient);
         when(couchbaseClient.getNodes()).thenReturn(getThreeUnhealthyNodes());
-        assertFalse(couchBaseHealthCheck.check().isHealthy());
+        assertFalse(defaultCouchBaseHealthCheck.check().isHealthy());
     }
 
 
@@ -53,8 +56,24 @@ public class CouchBaseHealthCheckTest {
     public void checkFiveUnhealthy() throws Exception {
         reset(couchbaseClient);
         when(couchbaseClient.getNodes()).thenReturn(getFiveUnhealthyNodes());
-        assertFalse(couchBaseHealthCheck.check().isHealthy());
+        assertFalse(defaultCouchBaseHealthCheck.check().isHealthy());
     }
+
+    @Test
+    public void checkThreeOutOfFiveHealthy() throws Exception {
+        reset(couchbaseClient);
+        when(couchbaseClient.getNodes()).thenReturn(getFiveUnhealthyNodes());
+        assertTrue(couchBaseHealthCheck.check().isHealthy());
+    }
+
+    @Test
+    public void checkTwoOutOfFiveHealthy() throws Exception {
+        reset(couchbaseClient);
+        when(couchbaseClient.getNodes()).thenReturn(getFiveUnhealthyNodes());
+        assertTrue(couchBaseHealthCheck.check().isHealthy());
+    }
+
+
 
 
     private JsonArray getThreeHealthyNodes() {
