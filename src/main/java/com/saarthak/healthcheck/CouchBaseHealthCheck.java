@@ -1,14 +1,15 @@
 package com.saarthak.healthcheck;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.codahale.metrics.health.HealthCheck;
 import com.couchbase.client.java.document.json.JsonArray;
 import com.couchbase.client.java.document.json.JsonObject;
 import com.saarthak.client.CouchbaseClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author saarthak.gupta
@@ -28,7 +29,6 @@ public class CouchBaseHealthCheck extends HealthCheck {
         this.minimumHealthyNodes = minimumHealthyNodes;
     }
 
-
     @Override
     protected Result check() throws Exception {
         log.info("Running health check for couch base");
@@ -45,7 +45,7 @@ public class CouchBaseHealthCheck extends HealthCheck {
             }
         });
 
-        //isHealthy is derived to be true when 50% or more nodes are healthy.
+        // isHealthy is derived to be true when 50% or more nodes are healthy.
         final boolean isHealthy = healthyNodes.size() >= (minimumHealthyNodes != null ? minimumHealthyNodes : unhealthyNodes.size());
 
         return isHealthy ? Result.healthy("Connected to Couchbase cluster. Healthy Nodes : " + healthyNodes)

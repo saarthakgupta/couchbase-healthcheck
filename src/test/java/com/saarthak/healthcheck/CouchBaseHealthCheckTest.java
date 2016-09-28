@@ -1,16 +1,17 @@
 package com.saarthak.healthcheck;
 
-import com.couchbase.client.java.document.json.JsonArray;
-import com.couchbase.client.java.document.json.JsonObject;
-import com.saarthak.client.CouchbaseClient;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.couchbase.client.java.document.json.JsonArray;
+import com.couchbase.client.java.document.json.JsonObject;
+import com.saarthak.client.CouchbaseClient;
 
 /**
  * @author saarthak.gupta
@@ -51,7 +52,6 @@ public class CouchBaseHealthCheckTest {
         assertFalse(defaultCouchBaseHealthCheck.check().isHealthy());
     }
 
-
     @Test
     public void checkFiveUnhealthy() throws Exception {
         reset(couchbaseClient);
@@ -72,9 +72,6 @@ public class CouchBaseHealthCheckTest {
         when(couchbaseClient.getNodes()).thenReturn(getFiveUnhealthyNodes());
         assertTrue(couchBaseHealthCheck.check().isHealthy());
     }
-
-
-
 
     private JsonArray getThreeHealthyNodes() {
         final JsonArray array = JsonArray.create();
