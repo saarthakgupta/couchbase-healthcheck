@@ -1,10 +1,10 @@
 # Couchbase Healthcheck
 
-This is a Couchbase healthcheck module which can be used to check the health of Couchbase cluster.
+This is a Couchbase healthcheck module which can be used to check the health of Couchbase cluster.  
 This library compiles only on Java 8.
  
 ## Dependencies
-dropwizard-core: 1.0.2
+dropwizard-core: 1.0.2  
 couchbase-client: 2.3.3
 
 ## Usage
@@ -23,11 +23,20 @@ Use the following maven dependency:
 ```
 
 ### Using Couchbase healthcheck with dropwizard
+Default behavior: This will report healthy if atleast 50% of the nodes are healthy.
 ```java
  final CouchbaseEnvironment couchbaseEnvironment = DefaultCouchbaseEnvironment.builder().build();
  final Cluster cluster = CouchbaseCluster.create(couchbaseEnvironment, getNodes()); // getNodes() method returns a List<String> of nodes.
  final CouchbaseClient couchbaseClient = new CouchbaseClient(getUserName(), getPassword(), cluster);// CouchbaseClient is bundled and needs username, password and cluster object to connect to hosts.
  environment.healthChecks().register("Couchbase", new CouchBaseHealthCheck(couchbaseClient));
+```
+
+For Version 1.0.3 and above : This will report healthy if the number of healthy nodes is atleast equal to the minimum number of healthy nodes provided.
+```java
+ final CouchbaseEnvironment couchbaseEnvironment = DefaultCouchbaseEnvironment.builder().build();
+ final Cluster cluster = CouchbaseCluster.create(couchbaseEnvironment, getNodes()); // getNodes() method returns a List<String> of nodes.
+ final CouchbaseClient couchbaseClient = new CouchbaseClient(getUserName(), getPassword(), cluster);// CouchbaseClient is bundled and needs username, password and cluster object to connect to hosts.
+ environment.healthChecks().register("Couchbase", new CouchBaseHealthCheck(couchbaseClient, minimumHealthyNodes));
 ```
 
 LICENSE
