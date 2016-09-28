@@ -18,7 +18,7 @@ Use the following maven dependency:
 <dependency>
   <groupId>org.clojars.saarthak</groupId>
   <artifactId>couchbase-healthcheck</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
 </dependency>
 ```
 
